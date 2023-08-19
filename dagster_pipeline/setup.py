@@ -8,6 +8,9 @@ setup(
         "dagster-cloud",
         "pandas",
         "yfinance",
+        "pyarrow",
+        "azure-storage-blob",
+        
         
 
     ],
