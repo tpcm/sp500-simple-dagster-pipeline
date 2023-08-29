@@ -1,9 +1,5 @@
-from dagster import Definitions, load_assets_from_modules
 
-from . import assets
+from my_dagster_project.repository import my_dagster_project
 
-all_assets = load_assets_from_modules([assets])
 
-defs = Definitions(
-    assets=all_assets,
-)
+my_dagster_project()

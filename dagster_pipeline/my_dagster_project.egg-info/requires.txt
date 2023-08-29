@@ -1,0 +1,10 @@
+dagster
+dagster-cloud
+pandas
+yfinance
+pyarrow
+azure-storage-blob
+
+[dev]
+dagster-webserver
+pytest

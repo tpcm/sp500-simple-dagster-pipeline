@@ -12,14 +12,16 @@ Notes:
 
 
 import datetime as dt
-from typing import List, Any, Dict, Optional
+from typing import List, Optional
+from requests.exceptions import HTTPError
+
 
 import pandas as pd
 import numpy as np
 import yfinance as yf
 
 
-def get_price_info(ticker: str, info_wanted: List[str]) -> pd.DataFrame:
+def get_ticker_info(ticker: str, info_wanted: List[str]) -> pd.DataFrame:
     """
     Get market cap and current price information for a given stock ticker.
 
@@ -54,7 +56,7 @@ def get_price_info(ticker: str, info_wanted: List[str]) -> pd.DataFrame:
     return info_retrieved
 
 
-def calculate_period_return(ticker: str, period: str) -> float:
+def calculate_return_for_period(ticker: str, period: str) -> float:
     """
     Calculate the percentage return of a stock over a specified period using yfinance library.
 
@@ -89,7 +91,7 @@ def calculate_period_return(ticker: str, period: str) -> float:
 
     Example:
     --------
-    >>> calculate_period_return('AAPL', '1y')
+    >>> calculate_return_for_period('AAPL', '1y')
     32.45
     """
     stock_data = yf.Ticker(ticker).history(period=period)
@@ -97,32 +99,6 @@ def calculate_period_return(ticker: str, period: str) -> float:
     last_close = stock_data["Close"][-1]
 
     return (last_close - first_close) / first_close * 100
-
-
-def calculate_price_to_earnings(
-    ticker: Optional[str], ticker_info: Optional[pd.DataFrame] = None
-):
-    """
-    REDUNDANT AS CAN JUST PULL IN TRAILING PE FROM CLASS ATTRIBUTES 'trailingPE'
-    Calculate the Price-to-Earnings (P/E) ratio for a given stock ticker.
-
-    Parameters:
-    -----------
-        ticker (str): Ticker symbol of the stock.
-
-    Returns:
-    --------
-        float: The calculated P/E ratio.
-    """
-    if not ticker_info:
-        tick = yf.Ticker(ticker)
-        tick_info = tick.info
-
-    stock_data = tick.history(period="12mo")
-    eps = tick_info["trailingEps"]
-    current_price = stock_data["Close"][-1]
-
-    return current_price / eps
 
 
 def calculate_price_to_cash_flow(ticker: Optional[str]):
@@ -140,7 +116,6 @@ def calculate_price_to_cash_flow(ticker: Optional[str]):
     """
     try:
         tick_info = ticker.info
-
         stock_data = ticker.history(period="12mo")
         thirty_day_mean_share_price = stock_data["Close"][-30:].mean()
         operating_cash_flow = tick_info["operatingCashflow"]

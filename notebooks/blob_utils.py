@@ -7,6 +7,7 @@ from io import BytesIO
 import pandas as pd
 from azure.storage.blob import BlobServiceClient
 
+
 def get_blob_service_client_connection_string(
     azure_storage_connection_string: str,
 ) -> BlobServiceClient:
@@ -27,6 +28,7 @@ def get_blob_service_client_connection_string(
     blob_service_client = BlobServiceClient.from_connection_string(connection_string)
 
     return blob_service_client
+
 
 def upload_to_blob(
     blob_service_client: BlobServiceClient,
@@ -51,6 +53,7 @@ def upload_to_blob(
     )
     
     container_client.upload_blob(name=filename, data=data, overwrite=True)
+
 
 def upload_to_blob_from_file(
     blob_service_client: BlobServiceClient,

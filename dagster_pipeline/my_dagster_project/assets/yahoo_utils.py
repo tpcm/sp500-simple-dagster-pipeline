@@ -12,14 +12,13 @@ Notes:
 
 
 import datetime as dt
-from typing import List, Any, Dict, Optional
+from typing import List, Optional, Any, Dict
 
 import pandas as pd
-import numpy as np
 import yfinance as yf
 
 
-def get_price_info(ticker: str, info_wanted: List[str]) -> pd.DataFrame:
+def get_ticker_info(ticker: str, info_wanted: List[str]) -> Dict:
     """
     Get market cap and current price information for a given stock ticker.
 
@@ -44,12 +43,12 @@ def get_price_info(ticker: str, info_wanted: List[str]) -> pd.DataFrame:
     except Exception:
         return None
 
-    info_retrieved = []
+    info_retrieved = {}
     for i in info_wanted:
         try:
-            info_retrieved.append(tick_info[i])
+            info_retrieved[i] = tick_info[i]
         except KeyError:
-            info_retrieved.append(None)
+            info_retrieved[i] = None
 
     return info_retrieved
 
